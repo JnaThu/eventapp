@@ -14,7 +14,7 @@ async function getEvent(id: string): Promise<Event | null> {
 }
 
 function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString('nb-NO', {
+  return new Date(dateString).toLocaleDateString('en-GB', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -23,14 +23,14 @@ function formatDate(dateString: string) {
 }
 
 function formatTime(dateString: string) {
-  return new Date(dateString).toLocaleTimeString('nb-NO', {
+  return new Date(dateString).toLocaleTimeString('en-GB', {
     hour: '2-digit',
     minute: '2-digit',
   })
 }
 
 function formatPrice(price: number | null) {
-  if (price === null || price === 0) return 'Gratis'
+  if (price === null || price === 0) return 'Free'
   return `${price} kr`
 }
 
@@ -49,7 +49,7 @@ export default async function EventPage(props: PageProps<'/events/[id]'>) {
           href="/"
           className="inline-flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors mb-8"
         >
-          <span aria-hidden>←</span> Tilbake til alle arrangementer
+          <span aria-hidden>←</span> Back to all events
         </Link>
 
         <article className="bg-white dark:bg-zinc-800 rounded-2xl border border-zinc-200 dark:border-zinc-700 shadow-sm overflow-hidden">
@@ -73,7 +73,7 @@ export default async function EventPage(props: PageProps<'/events/[id]'>) {
             <dl className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="rounded-xl bg-zinc-50 dark:bg-zinc-900 p-4">
                 <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
-                  Dato
+                  Date
                 </dt>
                 <dd className="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-200 capitalize">
                   {formatDate(event.date)}
@@ -82,7 +82,7 @@ export default async function EventPage(props: PageProps<'/events/[id]'>) {
 
               <div className="rounded-xl bg-zinc-50 dark:bg-zinc-900 p-4">
                 <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
-                  Tidspunkt
+                  Time
                 </dt>
                 <dd className="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-200">
                   {formatTime(event.date)}
@@ -91,7 +91,7 @@ export default async function EventPage(props: PageProps<'/events/[id]'>) {
 
               <div className="rounded-xl bg-zinc-50 dark:bg-zinc-900 p-4 sm:col-span-2">
                 <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
-                  Sted
+                  Location
                 </dt>
                 <dd className="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-200">
                   {event.location}
@@ -102,7 +102,7 @@ export default async function EventPage(props: PageProps<'/events/[id]'>) {
             {event.description && (
               <div className="mt-8">
                 <h2 className="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-3">
-                  Om arrangementet
+                  About this event
                 </h2>
                 <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-line">
                   {event.description}

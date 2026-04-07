@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dansearrangementer Bergen",
-  description: "Finn dansekurs, sosiale kvelder og konkurranser i Bergen.",
+  title: "Dance Events Bergen",
+  description: "Find dance classes, socials and competitions in Bergen.",
 };
 
 export default function RootLayout({

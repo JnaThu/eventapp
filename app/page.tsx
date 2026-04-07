@@ -16,7 +16,7 @@ async function getEvents(): Promise<Event[]> {
 }
 
 function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString('nb-NO', {
+  return new Date(dateString).toLocaleDateString('en-GB', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -25,7 +25,7 @@ function formatDate(dateString: string) {
 }
 
 function formatPrice(price: number | null) {
-  if (price === null || price === 0) return 'Gratis'
+  if (price === null || price === 0) return 'Free'
   return `${price} kr`
 }
 
@@ -37,10 +37,10 @@ export default async function Home() {
       <header className="bg-white dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-700">
         <div className="max-w-4xl mx-auto px-6 py-8">
           <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Dansearrangementer i Bergen
+            Dance Events in Bergen
           </h1>
           <p className="mt-2 text-zinc-500 dark:text-zinc-400">
-            Finn dansekurs, sosiale kvelder og konkurranser nær deg.
+            Find dance classes, socials and competitions near you.
           </p>
         </div>
       </header>
@@ -48,7 +48,7 @@ export default async function Home() {
       <main className="max-w-4xl mx-auto px-6 py-10">
         {events.length === 0 ? (
           <p className="text-zinc-500 dark:text-zinc-400">
-            Ingen arrangementer funnet.
+            No events found.
           </p>
         ) : (
           <ul className="space-y-4">

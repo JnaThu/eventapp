@@ -1,7 +1,7 @@
 'use server'
 
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient, createClient } from '@/lib/supabase/server'
 
 export type AuthState = { error: string } | undefined
 
@@ -41,18 +41,27 @@ async function signUpWithRole(
 ): Promise<AuthState> {
   const supabase = await createClient()
 
-  const { error } = await supabase.auth.signUp({
-    email: formData.get('email') as string,
+  const email = formData.get('email') as string
+  const full_name = formData.get('full_name') as string
+
+  const { data, error: signUpError } = await supabase.auth.signUp({
+    email,
     password: formData.get('password') as string,
     options: {
-      data: {
-        full_name: formData.get('full_name') as string,
-        role,
-      },
+      data: { full_name, role },
     },
   })
 
-  if (error) return { error: error.message }
+  if (signUpError) return { error: signUpError.message }
+
+  const user = data.user
+  if (!user) return { error: 'Sign up succeeded but no user was returned.' }
+
+  const { error: profileError } = await createAdminClient()
+    .from('profiles')
+    .insert({ id: user.id, full_name, email, role })
+
+  if (profileError) return { error: `Account created but profile setup failed: ${profileError.message}` }
 
   redirect('/')
 }

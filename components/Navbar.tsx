@@ -33,12 +33,20 @@ export default async function Navbar() {
         {user ? (
           <div className="flex items-center gap-3">
             {role === 'organiser' && (
-              <Link
-                href="/events/new"
-                className="rounded-full bg-zinc-900 dark:bg-zinc-50 px-4 py-1.5 text-sm font-medium text-white dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors whitespace-nowrap"
-              >
-                Post an event
-              </Link>
+              <>
+                <Link
+                  href="/dashboard"
+                  className="rounded-full border border-zinc-300 dark:border-zinc-600 px-4 py-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors whitespace-nowrap"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href="/events/new"
+                  className="rounded-full bg-zinc-900 dark:bg-zinc-50 px-4 py-1.5 text-sm font-medium text-white dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors whitespace-nowrap"
+                >
+                  Post an event
+                </Link>
+              </>
             )}
             <span className="text-sm text-zinc-600 dark:text-zinc-300 truncate max-w-[160px]">
               {displayName}

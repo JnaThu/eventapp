@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 
@@ -51,4 +52,25 @@ export async function createEvent(
   if (error) return { error: error.message }
 
   redirect(`/events/${event.id}`)
+}
+
+export async function deleteEvent(formData: FormData): Promise<void> {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) return
+
+  const id = formData.get('id') as string
+
+  // .eq('organiser_id', user.id) ensures organisers can only delete their own events
+  await createAdminClient()
+    .from('events')
+    .delete()
+    .eq('id', id)
+    .eq('organiser_id', user.id)
+
+  revalidatePath('/dashboard')
 }

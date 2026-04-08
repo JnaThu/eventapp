@@ -13,4 +13,5 @@ export type Event = {
   dance_style: string
   price: number | null
   description: string | null
+  organiser_id: string | null
 }

@@ -9,13 +9,15 @@ export default async function Navbar() {
   } = await supabase.auth.getUser()
 
   let displayName: string | null = null
+  let role: string | null = null
   if (user) {
     const { data: profile } = await supabase
       .from('profiles')
-      .select('full_name')
+      .select('full_name, role')
       .eq('id', user.id)
       .single()
     displayName = profile?.full_name ?? user.email ?? 'User'
+    role = profile?.role ?? null
   }
 
   return (
@@ -30,6 +32,14 @@ export default async function Navbar() {
 
         {user ? (
           <div className="flex items-center gap-3">
+            {role === 'organiser' && (
+              <Link
+                href="/events/new"
+                className="rounded-full bg-zinc-900 dark:bg-zinc-50 px-4 py-1.5 text-sm font-medium text-white dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors whitespace-nowrap"
+              >
+                Post an event
+              </Link>
+            )}
             <span className="text-sm text-zinc-600 dark:text-zinc-300 truncate max-w-[160px]">
               {displayName}
             </span>

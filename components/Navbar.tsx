@@ -48,9 +48,12 @@ export default async function Navbar() {
                 </Link>
               </>
             )}
-            <span className="text-sm text-zinc-600 dark:text-zinc-300 truncate max-w-[160px]">
+            <Link
+              href="/profile"
+              className="text-sm text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 truncate max-w-[160px] transition-colors"
+            >
               {displayName}
-            </span>
+            </Link>
             <form action={signOut}>
               <button
                 type="submit"

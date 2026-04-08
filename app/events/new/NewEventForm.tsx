@@ -22,6 +22,7 @@ const labelClass = 'block text-sm font-medium text-zinc-700 dark:text-zinc-300 m
 export default function NewEventForm() {
   const [state, action, pending] = useActionState(createEvent, undefined)
   const [isFree, setIsFree] = useState(false)
+  const [price, setPrice] = useState('0')
 
   return (
     <form action={action} className="space-y-5">
@@ -113,7 +114,8 @@ export default function NewEventForm() {
           step="1"
           placeholder="0"
           disabled={isFree}
-          value={isFree ? 0 : undefined}
+          value={isFree ? '0' : price}
+          onChange={(e) => setPrice(e.target.value)}
           className={inputClass}
         />
         <label className="mt-2 flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400 cursor-pointer select-none">

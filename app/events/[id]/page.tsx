@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
 import { supabase, type Event } from '@/lib/supabase'
+import BuyTicketButton from './BuyTicketButton'
 
 async function getEvent(id: string): Promise<Event | null> {
   const { data, error } = await supabase
@@ -36,11 +38,29 @@ function formatPrice(price: number | null) {
 
 export default async function EventPage(props: PageProps<'/events/[id]'>) {
   const { id } = await props.params
-  const event = await getEvent(id)
 
-  if (!event) {
-    notFound()
+  const [event, authClient] = await Promise.all([
+    getEvent(id),
+    createClient(),
+  ])
+
+  if (!event) notFound()
+
+  const {
+    data: { user },
+  } = await authClient.auth.getUser()
+
+  let attendeeRole: string | null = null
+  if (user) {
+    const { data: profile } = await authClient
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+    attendeeRole = profile?.role ?? null
   }
+
+  const showBuyButton = attendeeRole === 'attendee'
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
@@ -106,6 +126,23 @@ export default async function EventPage(props: PageProps<'/events/[id]'>) {
                 </h2>
                 <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-line">
                   {event.description}
+                </p>
+              </div>
+            )}
+
+            {showBuyButton && (
+              <div className="mt-8 pt-8 border-t border-zinc-100 dark:border-zinc-700">
+                <BuyTicketButton eventId={event.id} price={event.price} />
+              </div>
+            )}
+
+            {!user && (
+              <div className="mt-8 pt-8 border-t border-zinc-100 dark:border-zinc-700">
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 text-center">
+                  <Link href="/sign-in" className="font-medium text-zinc-900 dark:text-zinc-50 hover:underline">
+                    Log in
+                  </Link>{' '}
+                  as an attendee to get tickets.
                 </p>
               </div>
             )}

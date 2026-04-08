@@ -24,6 +24,20 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: 'Event not found' }, { status: 404 })
   }
 
+  const { data: existing } = await supabase
+    .from('tickets')
+    .select('id')
+    .eq('event_id', eventId)
+    .eq('attendee_id', user.id)
+    .maybeSingle()
+
+  if (existing) {
+    return Response.json(
+      { error: 'You are already registered for this event.' },
+      { status: 409 }
+    )
+  }
+
   const origin = request.headers.get('origin') ?? ''
 
   const session = await stripe.checkout.sessions.create({
